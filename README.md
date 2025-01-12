@@ -285,5 +285,7 @@ jobs:
 ```
 ---
 
+Para garantir que o ambiente de produção esteja protegido contra deploys com falhas, o YAML acima inclui etapas de validação e testes automatizados. Apenas se ambos forem bem-sucedidos, o deploy é realizado. O uso de um ambiente de staging ajuda a detectar problemas sem impactar a produção. As notificações via Slack informam a equipe sobre o estado do deploy. O monitoramento contínuo com ferramentas como Prometheus, juntamente com alertas em tempo real, ajuda a detectar e responder rapidamente a problemas. Essas práticas garantem a confiabilidade e a continuidade dos serviços em produção.
 
-
+---
+# 4- Modelagem de Dados
