@@ -2,7 +2,7 @@
 
 Sua empresa possui um banco de dados PostgreSQL com uma tabela de logs que cresce em 1 milhão de linhas por dia. Atualmente, as consultas realizadas nessa tabela estão extremamente lentas.
 
-## Tarefa #
+## Tarefas: #
 Proponha uma solução que otimize a performance para consultas de logs recentes (últimos 7 dias) sem degradar a consulta de logs antigos.
 
 Explique como você implementaria:
@@ -167,3 +167,118 @@ print(data_transformed)
 ```
 
 ---
+# 3- CI/CD e DevOps
+
+Sua equipe usa o Airflow para gerenciar pipelines de dados. Você precisa configurar um pipeline CI/CD que:
+
+Valide mudanças no código do Airflow antes do deploy.
+
+Realize testes automatizados em DAGs (Direcioned Acyclic Graphs).
+
+Envie alertas para o time se algo falhar durante o deploy.
+
+## Tarefas:
+
+Descreva o fluxo do pipeline CI/CD e ferramentas utilizadas.
+
+Crie um arquivo YAML básico para uma ferramenta CI/CD (ex.: GitHub Actions ou GitLab CI).
+
+Explique como garantir que o ambiente de produção esteja protegido contra deploys com falhas.
+
+# Resposta
+### Fluxo do Pipeline CI/CD
+
+1. **Controle de Versão**:
+   - **Ferramenta**: Git
+   - **Descrição**: O código fonte do Airflow, incluindo DAGs e scripts auxiliares, é armazenado em um repositório Git. Isso permite controle de versão, colaboração e histórico de alterações.
+
+2. **Validação de Código**:
+   - **Ferramenta**: GitHub Actions
+   - **Descrição**: Ao criar um novo branch ou fazer uma alteração no código, são executados jobs de validação que verificam a conformidade do código com padrões definidos (linting), verificam a sintaxe e aplicam outras validações estáticas.
+
+3. **Testes Automatizados**:
+   - **Ferramenta**: pytest
+   - **Descrição**: As DAGs e scripts do Airflow são submetidos a testes automatizados para garantir que funcionem conforme esperado. Isso inclui testes unitários, testes de integração e testes de ponta a ponta.
+
+4. **Build**:
+   - **Ferramenta**: Docker
+   - **Descrição**: Uma imagem Docker é construída contendo todas as dependências necessárias para o ambiente de execução do Airflow. Isso garante que o ambiente seja consistente em diferentes estágios de desenvolvimento e produção.
+
+5. **Implantação Contínua**:
+   - **Ferramenta**: AWS CodeDeploy
+   - **Descrição**: As imagens Docker são implantadas em um ambiente de teste ou produção usando ferramentas de orquestração e implantação contínua. Isso garante que as mudanças no código sejam entregues de forma consistente e automatizada.
+
+6. **Monitoramento e Alertas**:
+   - **Ferramenta**: Prometheus
+   - **Descrição**: O pipeline inclui monitoramento contínuo e configuração de alertas. Qualquer falha nos DAGs ou anomalias detectadas durante a execução acionam alertas para a equipe responsável, permitindo uma resposta rápida.
+
+7. **Gerenciamento de Configuração**:
+   - **Ferramenta**: Terraform
+   - **Descrição**: As configurações de infraestrutura e do ambiente do Airflow são gerenciadas como código, garantindo que qualquer mudança seja rastreável e reprodutível. (Idempotente)
+
+```yaml
+name: Airflow CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install apache-airflow
+      - name: Run linting
+        run: |
+          pip install flake8
+          flake8 dags/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install apache-airflow
+      - name: Run tests
+        run: |
+          pytest tests/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy to production
+        run: |
+          ./deploy_script.sh
+      - name: Notify team
+        uses: slackapi/slack-github-action@v1.16.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: 'Deployment completed successfully!'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+```
