@@ -424,3 +424,19 @@ monitor_changes(url)
 driver.quit()
 ```
 ---
+
+# 6- AWS e Infrastrutura
+Claro! Aqui está a transcrição do texto na imagem:
+
+---
+
+**Sua empresa precisa processar grandes volumes de dados em tempo real e armazená-los para consultas futuras.**
+
+## Tarefas:
+- Descreva uma arquitetura AWS que inclua:
+  - Ingestão em tempo real (ex.: Kinesis).
+  - Processamento (ex.: Lambda ou Glue).
+  - Armazenamento (ex.: S3 e Redshift).
+- Explique como dimensionar essa arquitetura para lidar com picos de tráfego.
+
+# Resposta
