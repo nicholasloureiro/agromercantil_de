@@ -308,3 +308,31 @@ Print utilizando o terminal linux do container para comunicar com o banco e me c
 
 Print tirado das tabelas criadas no DBeaver
 ![image](https://github.com/user-attachments/assets/b2fe4d2f-19b9-45aa-874b-d6841694ffa3)
+
+Print dados adicionados nas tabelas **CLIENTE, PRODUTO, PEDIDO e PEDIDOPRODUTO**, respectivamente
+![image](https://github.com/user-attachments/assets/bdf7c691-0571-4ecc-bc9b-3d7e9db46d48)
+
+Abaixo temos as consultas
+```sql
+--Produtos mais vendidos
+SELECT P.Nome, SUM(PP.Quantidade) AS TotalVendido
+FROM PedidoProduto PP
+JOIN Produto P ON PP.ProdutoID = P.IDProduto
+GROUP BY P.Nome
+ORDER BY TotalVendido DESC;
+
+--Histórico de compras cliente especìfico
+SELECT C.Nome, P.DataPedido, PR.Nome, PP.Quantidade, PP.PrecoUnitario
+FROM PedidoProduto PP
+JOIN Pedido P ON PP.PedidoID = P.PedidoID
+JOIN Cliente C ON P.ClienteID = C.ClienteID
+JOIN Produto PR ON PP.ProdutoID = PR.IDProduto
+WHERE C.ClienteID = 1
+ORDER BY P.DataPedido;
+
+--Cálculo faturamento mensal
+SELECT extract(year from P.DataPedido) AS Ano, extract (month from P.DataPedido) AS Mes, SUM(P.TotalPedido) AS FaturamentoMensal
+FROM Pedido P
+GROUP BY extract(year from P.DataPedido), extract (month from P.DataPedido) 
+ORDER BY Ano, Mes;
+```
