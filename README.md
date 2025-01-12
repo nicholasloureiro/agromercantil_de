@@ -443,5 +443,10 @@ Sua empresa precisa processar grandes volumes de dados em tempo real e armazená
 
 ![image](https://github.com/user-attachments/assets/fdbf6dbd-d227-4eb7-a61f-3d56e0dbdb5e)
 
+No diagrama acima, todos os dados coletados dos sensores IoT são centralizados no Amazon S3. Utilizando a funcionalidade de evolução de schema do AWS Glue, o Amazon Redshift Spectrum pode lidar automaticamente com mudanças no schema dos dados, como a adição ou remoção de colunas (por mais que haja alterações de estrutura, o pipeline não quebraria). Isso é alcançado através de um crawler do AWS Glue, que lê e adapta as mudanças de schema com base nas estruturas dos arquivos no S3. O crawler cria um schema híbrido, compatível com datasets antigos e novos. Assim, todos os arquivos de dados ingeridos podem ser lidos de um local especificado no S3 por meio de uma única tabela do Amazon Redshift Spectrum, referenciando o catálogo de metadados do AWS Glue.
+
+Dessa forma, conseguiria lidar com as mudanças no esquema sem quebrar o pipeline. Essa arquitetura estaria preparada para lidar com horários de pico, pois serviços como Amazon Kinesis e AWS Glue podem escalar automaticamente conforme a demanda. O Amazon S3 é altamente escalável e o Redshift pode ser dimensionado adicionando mais nós ao cluster ou aumentando a capacidade dos nós existentes, garantindo que os dados continuem fluindo mesmo com tráfego intenso.
+
+
 
 
