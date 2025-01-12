@@ -107,4 +107,9 @@ Você está criando um pipeline que deve:
 - Liste os principais desafios técnicos que você enfrentaria e como resolveria cada um.
 - Escreva um script em Python que implemente a etapa de leitura do S3 e aplicação de uma transformação simples (ex.: cálculo de média de um campo).
 
+## Resposta
+
+![image](https://github.com/user-attachments/assets/fdbf6dbd-d227-4eb7-a61f-3d56e0dbdb5e)
+
+
 
