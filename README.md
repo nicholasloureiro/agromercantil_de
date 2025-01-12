@@ -312,7 +312,8 @@ Print tirado das tabelas criadas no DBeaver
 Print dados adicionados nas tabelas **CLIENTE, PRODUTO, PEDIDO e PEDIDOPRODUTO**, respectivamente
 ![image](https://github.com/user-attachments/assets/bdf7c691-0571-4ecc-bc9b-3d7e9db46d48)
 
-Abaixo temos as consultas
+Abaixo temos as consultas:
+## Script SQL
 ```sql
 --Produtos mais vendidos
 SELECT P.Nome, SUM(PP.Quantidade) AS TotalVendido
@@ -336,3 +337,6 @@ FROM Pedido P
 GROUP BY extract(year from P.DataPedido), extract (month from P.DataPedido) 
 ORDER BY Ano, Mes;
 ```
+Print resultado das 3 consultas, na ordem que aparecem no script acima:
+![image](https://github.com/user-attachments/assets/16eb8a12-ad71-4932-b73e-621207405ce4)
+
