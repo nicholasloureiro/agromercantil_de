@@ -115,7 +115,7 @@ No diagrama acima, todos os dados coletados dos sensores IoT são centralizados 
 
 Para executar a tarefa, eu carregaria os dados iniciais no S3 e executaria um AWS Glue Crawler para catalogá-los. Depois, criaria um schema externo no Redshift e usaria o Redshift Spectrum para consultar a tabela e ler os dados iniciais.
 
-Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, validando a ingestão no S3 e atualizando as definições de tabela com o Glue Crawler. Consultaria a tabela no Redshift Spectrum para ler os dados combinados de dois schemas. Removeria uma coluna do template, enviaria ao Firehose, validaria a ingestão no S3 e atualizaria as definições com o Glue Crawler.
+Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, validando a ingestão no S3 e atualizando as definições de tabela com o Glue Crawler. Consultaria a tabela no Redshift Spectrum para ler os dados combinados de dois schemas. Rodaria o script python que se encontra no final da resposta desta questão, que cria uma coluna nova na estrutura, enviaria ao Firehose, validaria a ingestão no S3 e atualizaria as definições com o Glue Crawler.
 
 ### Principais Desafios Técnicos e Soluções
 
@@ -340,3 +340,4 @@ ORDER BY Ano, Mes;
 Print resultado das 3 consultas, na ordem que aparecem no script acima:
 ![image](https://github.com/user-attachments/assets/16eb8a12-ad71-4932-b73e-621207405ce4)
 
+---
