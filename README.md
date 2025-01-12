@@ -95,7 +95,7 @@ Ref: https://aws.amazon.com/pt/rds/aurora/pricing/
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-# Pipeline de Dados
+# 2- Pipeline de Dados
 
 Você está criando um pipeline que deve:
 1. Ler dados brutos de sensores IoT armazenados no S3.
@@ -164,6 +164,6 @@ field_name = 'peso_em_kg'
 data_transformed = convert_to_sacks(data, field_name)
 
 print(data_transformed)
-
+```
 
 ---
