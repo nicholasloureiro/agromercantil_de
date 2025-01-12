@@ -134,3 +134,33 @@ Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, 
 4. **Gerenciamento de Acessos**:
    - **Desafio**: Garantir a segurança e gerenciamento adequado dos dados.
    - **Solução**: Utilizar o AWS Identity and Access Management (IAM) para controlar acessos e permissões.
+## Script
+import boto3
+import pandas as pd
+from io import StringIO
+
+
+s3_client = boto3.client('s3')
+bucket_name = 'bucketagromercantil'
+file_key = 'agromercantil/sensores/dados_csv/arquivo.csv'
+
+
+def read_s3_data(bucket, key):
+    response = s3_client.get_object(Bucket=bucket, Key=key)
+    data = response['Body'].read().decode('utf-8')
+    return pd.read_csv(StringIO(data))
+
+
+def convert_to_sacks(data, field):
+    data['peso_em_sacas'] = data[field] / 60
+    return data
+
+
+data = read_s3_data(bucket_name, file_key)
+
+
+field_name = 'peso_em_kg'
+data_transformed = convert_to_sacks(data, field_name)
+
+print(data_transformed)
+---
