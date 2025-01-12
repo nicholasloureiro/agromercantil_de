@@ -301,3 +301,7 @@ Um cliente deseja uma base de dados para gerenciar pedidos, clientes e produtos 
   - Retornar os produtos mais vendidos
   - Listar o histórico de compras de um cliente específico
   - Calcular o faturamento mensal
+# Resposta
+## Para resolver esta questão, criei um banco postgresql em minha máquina utilizando docker
+Print tirado das tabelas criadas no DBeaver
+![image](https://github.com/user-attachments/assets/b2fe4d2f-19b9-45aa-874b-d6841694ffa3)
