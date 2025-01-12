@@ -87,9 +87,13 @@ Primeiros 30 dias (S3 Glacier Instant Retrieval): R$ 0,12/mês
 De 31 a 90 dias (S3 Glacier Flexible Retrieval): R$ 0,108/mês
 
 
+# REDUÇÃO DE CUSTOS DE APROXIMADAMENTE 98%
+
 Ref: https://aws.amazon.com/pt/s3/pricing/?gclid=CjwKCAiA7Y28BhAnEiwAAdOJUHkHk7-4SguNMVbmbXqOCnowlx4VJ56qu33bwgQvq43Ra_tL1m5-ABoChmsQAvD_BwE&trk=3daf7be6-997a-4e7c-af79-be4074c210e4&sc_channel=ps&ef_id=CjwKCAiA7Y28BhAnEiwAAdOJUHkHk7-4SguNMVbmbXqOCnowlx4VJ56qu33bwgQvq43Ra_tL1m5-ABoChmsQAvD_BwE:G:s&s_kwcid=AL!4422!3!536456042828!p!!g!!amazon%20s3%20data%20storage%20pricing!12024810840!115492236145
 
 Ref: https://aws.amazon.com/pt/rds/aurora/pricing/
+
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
