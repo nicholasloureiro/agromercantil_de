@@ -111,5 +111,26 @@ Você está criando um pipeline que deve:
 
 ![image](https://github.com/user-attachments/assets/fdbf6dbd-d227-4eb7-a61f-3d56e0dbdb5e)
 
+No diagrama acima, todos os dados coletados dos sensores IoT são centralizados no Amazon S3. Utilizando a funcionalidade de evolução de schema do AWS Glue, o Amazon Redshift Spectrum pode lidar automaticamente com mudanças no schema dos dados, como a adição ou remoção de colunas (por mais que haja alterações de estrutura, o pipeline não quebraria). Isso é alcançado através de um crawler do AWS Glue, que lê e adapta as mudanças de schema com base nas estruturas dos arquivos no S3. O crawler cria um schema híbrido, compatível com datasets antigos e novos. Assim, todos os arquivos de dados ingeridos podem ser lidos de um local especificado no S3 por meio de uma única tabela do Amazon Redshift Spectrum, referenciando o catálogo de metadados do AWS Glue.
 
+Para executar a tarefa, eu carregaria os dados iniciais no S3 e executaria um AWS Glue Crawler para catalogá-los. Depois, criaria um schema externo no Redshift e usaria o Redshift Spectrum para consultar a tabela e ler os dados iniciais.
 
+Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, validando a ingestão no S3 e atualizando as definições de tabela com o Glue Crawler. Consultaria a tabela no Redshift Spectrum para ler os dados combinados de dois schemas. Removeria uma coluna do template, enviaria ao Firehose, validaria a ingestão no S3 e atualizaria as definições com o Glue Crawler.
+
+### Principais Desafios Técnicos e Soluções
+
+1. **Coleta de Dados em Tempo Real**:
+   - **Desafio**: Lidar com a grande quantidade de dados gerados pelos sensores IoT.
+   - **Solução**: Utilizar o Amazon S3 para armazenar os dados brutos, proporcionando um armazenamento eficiente e escalável. (Também aplicando as políticas de ciclo de vida cabíveis para o tipo de uso)
+
+2. **Transformação de Dados**:
+   - **Desafio**: Processar dados em tempo real e realizar transformações complexas.
+   - **Solução**: Utilizar o AWS Glue para ETL, **sem a necessidade de intervenção manual**. e Amazon Data Firehose para a ingestão dos dados transformados.
+
+3. **Armazenamento e Consulta**:
+   - **Desafio**: Armazenar e consultar grandes volumes de dados para análise futura.
+   - **Solução**: Carregar os dados transformados no Amazon Redshift, que é otimizado para consultas analíticas.
+
+4. **Gerenciamento de Acessos**:
+   - **Desafio**: Garantir a segurança e gerenciamento adequado dos dados.
+   - **Solução**: Utilizar o AWS Identity and Access Management (IAM) para controlar acessos e permissões.
