@@ -289,3 +289,15 @@ Para garantir que o ambiente de produção esteja protegido contra deploys com f
 
 ---
 # 4- Modelagem de Dados
+Um cliente deseja uma base de dados para gerenciar pedidos, clientes e produtos de uma loja virtual. Ele precisa saber:
+
+- Quais são os produtos mais vendidos
+- O histórico de compras de cada cliente
+- A evolução mensal do faturamento
+
+## Tarefas:
+- Modelar o banco de dados, criando um esquema ER (Entidade Relacionamento)
+- Escrever scripts SQL para:
+  - Retornar os produtos mais vendidos
+  - Listar o histórico de compras de um cliente específico
+  - Calcular o faturamento mensal
