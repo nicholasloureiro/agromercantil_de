@@ -344,3 +344,11 @@ Print resultado das 3 consultas, na ordem que aparecem no script acima:
 
 ---
 # 5- Web Scraping
+
+Você precisa monitorar os preços de produtos em um site de e-commerce que atualiza o layout com frequência e bloqueia bots de forma ativa.
+
+## Tarefas:
+
+- Explique como configurar um scraper resiliente para evitar bloqueios.
+- Escreva um código básico que realize o scraping de uma página fictícia com Python.
+- Detecte mudanças no layout (ex.: mudanças de tags HTML).
