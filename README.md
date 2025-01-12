@@ -134,7 +134,7 @@ Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, 
 4. **Gerenciamento de Acessos**:
    - **Desafio**: Garantir a segurança e gerenciamento adequado dos dados.
    - **Solução**: Utilizar o AWS Identity and Access Management (IAM) para controlar acessos e permissões.
-## Script
+## Script Python
 ```python
 import boto3
 import pandas as pd
@@ -215,6 +215,7 @@ Explique como garantir que o ambiente de produção esteja protegido contra depl
 7. **Gerenciamento de Configuração**:
    - **Ferramenta**: Terraform
    - **Descrição**: As configurações de infraestrutura e do ambiente do Airflow são gerenciadas como código, garantindo que qualquer mudança seja rastreável e reprodutível. (Idempotente)
+## Script YAML
 
 ```yaml
 name: Airflow CI/CD Pipeline
@@ -277,8 +278,12 @@ jobs:
         uses: slackapi/slack-github-action@v1.16.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-message: 'Deployment completed successfully!'
+          slack-message: 'Deploy executado com sucesso!!'
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
 ```
+---
+
+
+
