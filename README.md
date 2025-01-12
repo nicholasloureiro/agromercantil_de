@@ -352,3 +352,75 @@ Você precisa monitorar os preços de produtos em um site de e-commerce que atua
 - Explique como configurar um scraper resiliente para evitar bloqueios.
 - Escreva um código básico que realize o scraping de uma página fictícia com Python.
 - Detecte mudanças no layout (ex.: mudanças de tags HTML).
+
+# Resposta
+
+Antes de fazer o scraping, é interessante inspecionarmos a página e olharmos o arquivo robots.txt do site que iremos raspar dados, é um arquivo de texto simples que os administradores de sites utilizam para direcionar os bots dos motores de busca sobre como devem acessar suas páginas, é importante que nosso código não quebre as regras deste arquivo. Neste exemplo vou realizar o scraping na página inicial do Magazine Luiza, normalmente eu utilizaria somente as bibliotecas Requests e BeautifulSoup (se dão muito bem com HTML estático), mas como o site do Magazine Luiza é carregado dinâmicamente com JavaScript, foi necessário utilizar a biblioteca Selenium para acessar a página e BeautifulSoup para analisar o HTML (agora sim, estático). Cada vez que o código roda, ele gera um hash do conteúdo da página e compara com o hash anterior, se os hashes forem diferentes, significa que o layout mudou. Além disso também salvo a pagina em HTML estático para análises posteriores.
+Para evitar que o site detecte e bloqueie o scraper, usei a biblioteca random para adicionar variação nos tempos de espera e nos user agents, tentando simular um comportamento mais humano. Essa aleatoriedade aliada ao código, que não fere as regras do arquivo robots.txt ajuda a tornar o scraper mais difícil de ser detectado e bloqueado pelo site.
+
+### Robots.txt do Magalu: https://www.magazineluiza.com.br/robots.txt
+### URL utilizada: https://www.magazineluiza.com.br/
+
+## Script Python
+
+```python
+
+import hashlib
+import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+from bs4 import BeautifulSoup
+from datetime import datetime
+import random
+
+
+url = 'https://www.magazineluiza.com.br/'
+
+
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/89.0 Safari/537.36',
+    
+]
+
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')  
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+
+def get_page_hash(url):
+    headers = {'User-Agent': random.choice(user_agents)}
+    driver.get(url)
+    time.sleep(random.uniform(3, 7))  
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    page = requests.get(url, headers=headers) 
+    time_of_run = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
+    with open(f'magalu_html_{time_of_run}.txt', 'wb+') as f: 
+        f.write(page.content)
+    return hashlib.md5(soup.prettify().encode('utf-8')).hexdigest()
+
+
+def monitor_changes(url):
+    previous_hash = None
+    while True:
+        try:
+            current_hash = get_page_hash(url)
+            if previous_hash and current_hash != previous_hash:
+                print("Mudança detectada no layout!")
+            else:
+                print("Nenhuma mudança detectada.")
+            previous_hash = current_hash
+        except Exception as e:
+            print(f"Erro ao acessar a página: {e}")
+        time.sleep(random.uniform(270, 330))  
+
+
+monitor_changes(url)
+
+
+driver.quit()
+```
+---
