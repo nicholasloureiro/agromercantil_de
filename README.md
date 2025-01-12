@@ -287,6 +287,8 @@ jobs:
 
 Para garantir que o ambiente de produção esteja protegido contra deploys com falhas, o YAML acima inclui etapas de validação e testes automatizados. Apenas se ambos forem bem-sucedidos, o deploy é realizado. O uso de um ambiente de staging ajuda a detectar problemas sem impactar a produção. As notificações via Slack informam a equipe sobre o estado do deploy. O monitoramento contínuo com ferramentas como Prometheus, juntamente com alertas em tempo real, ajuda a detectar e responder rapidamente a problemas. Essas práticas garantem a confiabilidade e a continuidade dos serviços em produção.
 
+Ref: KLEPPMANN, M. Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems. São Francisco: O'Reilly Media, 2017.
+
 ---
 # 4- Modelagem de Dados
 Um cliente deseja uma base de dados para gerenciar pedidos, clientes e produtos de uma loja virtual. Ele precisa saber:
@@ -341,3 +343,4 @@ Print resultado das 3 consultas, na ordem que aparecem no script acima:
 ![image](https://github.com/user-attachments/assets/16eb8a12-ad71-4932-b73e-621207405ce4)
 
 ---
+# 5- Web Scraping
