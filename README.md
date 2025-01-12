@@ -135,8 +135,7 @@ Adicionaria novos elementos ao template do KDG e enviaria os dados ao Firehose, 
    - **Desafio**: Garantir a segurança e gerenciamento adequado dos dados.
    - **Solução**: Utilizar o AWS Identity and Access Management (IAM) para controlar acessos e permissões.
 ## Script
-'''
-python
+```python
 import boto3
 import pandas as pd
 from io import StringIO
@@ -165,6 +164,6 @@ field_name = 'peso_em_kg'
 data_transformed = convert_to_sacks(data, field_name)
 
 print(data_transformed)
-'''
+
 
 ---
