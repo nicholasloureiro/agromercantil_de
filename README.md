@@ -423,6 +423,7 @@ monitor_changes(url)
 
 driver.quit()
 ```
+### Para executar o código basta somente instalar as bibliotecas citadas e rodar o script em um pc com python instalado.
 ---
 
 # 6- AWS e Infrastrutura
@@ -437,4 +438,10 @@ Sua empresa precisa processar grandes volumes de dados em tempo real e armazená
 - Explique como dimensionar essa arquitetura para lidar com picos de tráfego.
 
 # Resposta
+
+##Neste exemplo vou utilizar como base a arquitetura da questão 2
+
+![image](https://github.com/user-attachments/assets/fdbf6dbd-d227-4eb7-a61f-3d56e0dbdb5e)
+
+
 
