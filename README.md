@@ -423,7 +423,10 @@ monitor_changes(url)
 
 driver.quit()
 ```
-### Para executar o código basta somente instalar as bibliotecas citadas e rodar o script em um pc com python instalado.
+### Executando o Script:
+- Instale as dependências: `pip install selenium webdriver-manager beautifulsoup4 requests`.
+- Verifique se o Chrome está instalado para `webdriver_manager`.
+- Execute o script, e ele monitorará o site para mudanças. Use `Ctrl+C` para parar o monitoramento.
 ---
 
 # 6- AWS e Infrastrutura
