@@ -530,6 +530,8 @@ Ref: https://certificacaoiso.com.br/matriz-de-riscos-o-que-e-e-como-aplicar/
 
 Ref: https://aws.amazon.com/pt/blogs/
 
+Ref: https://aws.amazon.com/pt/s3/features/access-points/
+
 ---
 
 ## 9- Data Lakes e Data Warehouses
