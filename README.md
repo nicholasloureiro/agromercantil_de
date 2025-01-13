@@ -456,3 +456,41 @@ Um pipeline de dados apresenta falhas esporádicas que só são descobertas dias
 - Explique quais métricas monitorar (ex.: tempo de execução, volume de dados) e como configurar alertas no CloudWatch ou uma ferramenta equivalente.
 # Resposta
 
+Para resolver falhas no pipeline de dados, seria importante saber o tipo de pipeline, entender a linhagem dos dados, e em qual etapa do pipeline a falha está acontecendo, primeiro monitoraria o tempo de execução, volume de dados, falhas nas tarefas específicas e uso de recursos como CPU e memória. Usaria AWS CloudWatch para configurar essas métricas e criar dashboards em tempo real. Alarmes me avisariam se algo saísse do normal, por exemplo, se o tempo de execução estiver muito longo ou se o volume de dados estiver estranho. Para notificações, configuraria o Amazon SNS para enviar avisos por email, SMS ou push notifications. 
+
+Como o enunciado não menciona o tipo de pipeline, isso dificulta a especificação de métricas e alertas mais precisos, porém com as seguintes práticas é possível descobrir onde ocorreram e como ocorreram os erros, acelerando a resolução:
+
+- **Documentação Completa**: Sempre documentar todas as etapas do pipeline e as métricas a serem monitoradas. 
+- **Testes Automatizados**: Implementar testes para validar cada componente do pipeline. Assim, descobrindo qual etapa está o erro.
+- **Versionamento de Dados**: Utilizar versionamento para rastrear mudanças nos dados e no código do pipeline. Possibilitando um possível rollback.
+- **Gerenciamento de Erros**: Definir estratégias claras para lidar com falhas e exceções.
+
+# 8- Data Governance e Segurança
+
+Sua empresa precisa garantir que os dados sensíveis armazenados em seu ambiente AWS estejam protegidos e em conformidade com regulamentações como LGPD ou GDPR.
+
+## Tarefas:
+- Proponha uma estratégia para garantir:
+  - Controle de acesso apropriado em S3 e Redshift.
+  - Criptografia de dados em repouso e em trânsito.
+  - Logs detalhados de acesso e auditoria.
+- Explique como você verificaria se a empresa está em conformidade com regulamentações de proteção de dados.
+# Resposta
+
+#### 1. Controle de Acesso Apropriado em S3 e Redshift
+Para garantir o controle de acesso apropriado em S3 e Redshift, eu utilizaria o **Amazon Identity and Access Management (IAM)** para definir políticas de acesso detalhadas. Além disso, utilizaria **Amazon S3 Bucket Policies** e **Redshift IAM Policies** para controlar quem pode acessar e modificar os dados.
+
+#### 2. Criptografia de Dados em Repouso e em Trânsito
+Para a criptografia de dados em repouso, utilizaria **Amazon S3 Server-Side Encryption (SSE)** e para dados em trânsito, utilizaria **TLS/SSL** para garantir a segurança durante a transferência de dados.
+
+#### 3. Logs Detalhados de Acesso e Auditoria
+Implementaria **Amazon CloudTrail** para registrar e monitorar todas as ações realizadas nos recursos da AWS. Além disso, utilizaria **Amazon S3 Access Logs** para registrar todas as solicitações de acesso aos buckets S3.
+
+#### 4. Verificação de Conformidade com LGPD
+Para verificar se a empresa está em conformidade com a LGPD, é necessário implementar uma matriz de impacto de riscos e garantir que todas as práticas de coleta, tratamento e armazenamento de dados pessoais estejam em conformidade com a legislação. Isso inclui obter consentimento explícito dos titulares dos dados, garantir a transparência nas operações de dados e implementar medidas de segurança adequadas.
+
+Ref: https://lec.com.br/compliance-e-lgpd-qual-a-relacao/
+Ref: https://aws.amazon.com/pt/blogs/
+
+
+
