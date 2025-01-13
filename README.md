@@ -559,6 +559,8 @@ Sua empresa está implementando um Data Lake em S3 para armazenar dados brutos e
    - **Curated Layer**:
      - Retenção de longo prazo (3-5 anos ou conforme regulamentações).
      - Dados antigos podem ser compactados ou transferidos para camadas menos acessíveis.
+    
+       ### Exemplo da arquitetura medalhão utilizada na Databricks
    ![image](https://github.com/user-attachments/assets/3b97ea94-e91c-4a27-b4f8-6325fd5dcf34)
 
 
