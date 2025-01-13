@@ -449,5 +449,10 @@ Dessa forma, conseguiria lidar com as mudanças no esquema sem quebrar o pipelin
 
 ---
 # 7- Monitoramento e Alertas
+Um pipeline de dados apresenta falhas esporádicas que só são descobertas dias depois.
 
+## Tarefas:
+- Proponha uma solução para implementar monitoramento e alertas em tempo real.
+- Explique quais métricas monitorar (ex.: tempo de execução, volume de dados) e como configurar alertas no CloudWatch ou uma ferramenta equivalente.
+# Resposta
 
