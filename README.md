@@ -165,7 +165,8 @@ data_transformed = convert_to_sacks(data, field_name)
 
 print(data_transformed)
 ```
-
+### Executando o script
+- Código teste feito apenas para demonstrar a etapa de leitura do S3 e aplicação de uma transformação simples.
 ---
 # 3- CI/CD e DevOps
 
@@ -365,15 +366,18 @@ Para evitar que o site detecte e bloqueie o scraper, usei a biblioteca random pa
 
 ```python
 
-import hashlib
-import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-import time
 from bs4 import BeautifulSoup
 from datetime import datetime
+import hashlib
 import random
+import time
+import os
+import re
+import requests
+from unittest.mock import patch, MagicMock
 
 
 url = 'https://www.magazineluiza.com.br/'
@@ -422,11 +426,33 @@ monitor_changes(url)
 
 
 driver.quit()
+
+
+# Testes
+def test_get_page_hash(): 
+    url = 'https://www.magazineluiza.com.br/' 
+    with patch('random.choice', return_value=user_agents[0]), patch('selenium.webdriver.Chrome.get'), patch('time.sleep'): 
+        hash_value = get_page_hash(url)
+        assert re.match(r"^[a-fA-F0-9]{32}$", hash_value), "O valor hash retornado é inválido"
+
+
+def test_monitor_changes(capsys):
+    url = 'https://www.magazineluiza.com.br/'
+    with patch('random.choice', return_value=user_agents[0]), patch('selenium.webdriver.Chrome.get'), patch('time.sleep', side_effect=[1, 1]):
+        mock_get_page_hash = MagicMock(side_effect=['hash1', 'hash2'])
+        with patch('__main__.get_page_hash', mock_get_page_hash):
+            monitor_changes(url)
+            assert mock_get_page_hash.call_count == 2, "A função get_page_hash não foi chamada corretamente"
+            captured = capsys.readouterr()
+            assert 'Mudança detectada no layout!' in captured.out, "Mudança no layout não detectada"
+
+
 ```
 ### Executando o Script:
 - Instale as dependências: `pip install selenium webdriver-manager beautifulsoup4 requests`.
 - Verifique se o Chrome está instalado para `webdriver_manager`.
-- Execute o script, e ele monitorará o site para mudanças. Use `Ctrl+C` para parar o monitoramento.
+- Execute o script, e ele monitorará o site para mudanças. Use `Ctrl+C` para parar o monitoramento (Não irá funcionar na rede da Agromercantil).
+- Para executar os testes: `python3 -m pytest nome_do_arquivo.py`.
 ---
 
 # 6- AWS e Infrastrutura
@@ -481,7 +507,11 @@ Sua empresa precisa garantir que os dados sensíveis armazenados em seu ambiente
 # Resposta
 
 #### 1. Controle de Acesso Apropriado em S3 e Redshift
-Para garantir o controle de acesso apropriado em S3 e Redshift, eu utilizaria o **Amazon Identity and Access Management (IAM)** para definir políticas de acesso detalhadas. Além disso, utilizaria **Amazon S3 Bucket Policies** e **Redshift IAM Policies** para controlar quem pode acessar e modificar os dados.
+Para garantir o controle de acesso apropriado em S3 e Redshift, eu utilizaria o **Amazon Identity and Access Management (IAM)** para definir políticas de acesso detalhadas. Além disso, utilizaria **Amazon S3 Bucket Policies** e **Redshift IAM Policies** para controlar quem pode acessar e modificar os dados. Por fim, usaria o S3 Access Points para simplificar o gerenciamento de acesso a dados para o conjunto de aplicações nos conjuntos de dados compartilhados no S3. Não precisaria mais lidar com uma política de bucket única e complexa, com centenas de regras de permissão diferentes que precisam ser gravadas, lidas, rastreadas e auditadas. Com os Pontos de Acesso S3, poderia criar pontos de acesso específicos para cada aplicação, permitindo o acesso a conjuntos de dados compartilhados com políticas personalizadas.
+
+Para conjuntos de dados compartilhados grandes, eu poderia decompor uma política de bucket grande em políticas de ponto de acesso discretas e separadas para cada aplicação que precisasse acessar o conjunto de dados compartilhados. Isso permitiria focar na criação da política de acesso correta para uma aplicação, sem se preocupar em interromper o que qualquer outra aplicação está fazendo no conjunto de dados compartilhados. Também poderia copiar dados com segurança em altas velocidades entre Pontos de Acesso da mesma região usando a API de cópia S3, aproveitando as redes internas da AWS e VPCs.
+
+Um Ponto de Acesso do S3 poderia limitar todo o acesso ao armazenamento do S3 a partir de uma Virtual Private Cloud (VPC). Poderia também criar uma Política de Controle de Serviço (SCP) e exigir que todos os pontos de acesso fossem restritos a uma VPC, protegendo meus dados com firewall em redes privadas. Com os pontos de acesso, poderia testar facilmente novas políticas de controle de acesso antes de migrar aplicações para o ponto de acesso ou copiar a política para um ponto de acesso existente. O S3 Access Points permitiria especificar políticas de VPC endpoint que permitissem o acesso apenas a pontos de acesso (e, portanto, buckets) pertencentes a IDs de conta específicos. Isso simplificaria a criação de políticas de acesso que permitissem o acesso a buckets na mesma conta, enquanto rejeitaria qualquer outro acesso do S3 por meio do VPC endpoint.
 
 #### 2. Criptografia de Dados em Repouso e em Trânsito
 Para a criptografia de dados em repouso, utilizaria **Amazon S3 Server-Side Encryption (SSE)** e para dados em trânsito, utilizaria **TLS/SSL** para garantir a segurança durante a transferência de dados.
@@ -654,7 +684,8 @@ except Exception as e:
     print(f"Erro ao conectar ao Redshift: {e}")
 
 ```
-
+### Executando o script
+- Código teste feito apenas para demonstrar a integração de dados do Data Lake ao Data Warehouse.
 
 Ref:https://docs.aws.amazon.com/redshift/
 
