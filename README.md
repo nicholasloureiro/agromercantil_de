@@ -490,7 +490,90 @@ Implementaria **Amazon CloudTrail** para registrar e monitorar todas as ações 
 Para verificar se a empresa está em conformidade com a LGPD, é necessário implementar uma matriz de impacto de riscos e garantir que todas as práticas de coleta, tratamento e armazenamento de dados pessoais estejam em conformidade com a legislação. Isso inclui obter consentimento explícito dos titulares dos dados, garantir a transparência nas operações de dados e implementar medidas de segurança adequadas.
 
 Ref: https://lec.com.br/compliance-e-lgpd-qual-a-relacao/
+
 Ref: https://aws.amazon.com/pt/blogs/
+
+---
+
+## 9- Data Lakes e Data Warehouses
+
+Sua empresa está implementando um Data Lake em S3 para armazenar dados brutos e um Data Warehouse em Redshift para análises estruturadas.
+
+## Tarefas
+- Explique como você estruturaria os dados no Data Lake para facilitar o consumo no Data Warehouse.
+- Proponha uma política de gerenciamento do ciclo de vida dos dados no Data Lake, considerando arquivamento e exclusão de dados antigos.
+- Escreva um script de exemplo que integre dados do Data Lake ao Data Warehouse usando Python e SQL.
+
+  # Resposta
+
+  Para estruturar os dados no Data Lake e facilitar o consumo no Data Warehouse, seguiria a orientação da [documentação da Amazon S3](https://docs.aws.amazon.com/s3/). Organizaria os dados em pastas baseadas em partições, como ano, mês e dia, para melhorar a eficiência na consulta e transferência de dados.
+
+Para a política de gerenciamento do ciclo de vida dos dados no Data Lake, consultaria a [documentação da Amazon S3 Glacier](https://docs.aws.amazon.com/s3/). MOveria dados que não são acessados frequentemente para o Amazon S3 Glacier após 90 dias e excluiria dados mais antigos após 365 dias, conforme necessário.
+
+## Script Python
+```python
+import boto3
+import psycopg2
+from botocore.exceptions import NoCredentialsError
+
+# Configurações AWS e Redshift
+s3_bucket = 'data-lake-bucket'
+s3_key = 'ano=2025/mes=01/dia=01/dados.csv'
+redshift_host = 'redshift-cluster-url'
+redshift_user = 'username'
+redshift_password = 'password'
+redshift_db = 'database'
+redshift_table = 'data_table'
+iam_role = 'arn:aws:iam::account-id:role/RedshiftCopyRole'
+
+# Conectar ao S3
+s3_client = boto3.client('s3')
+try:
+    s3_client.download_file(s3_bucket, s3_key, '/tmp/dados.csv')
+    print("Arquivo baixado com sucesso do S3")
+except NoCredentialsError:
+    print("Credenciais AWS não encontradas")
+
+# Conectar ao Redshift
+try:
+    conn = psycopg2.connect(
+        dbname=redshift_db,
+        user=redshift_user,
+        password=redshift_password,
+        host=redshift_host
+    )
+    cursor = conn.cursor()
+    print("Conectado ao Redshift")
+
+    # Copiar dados do S3 para o Redshift
+    copy_query = f"""
+    COPY {redshift_table}
+    FROM 's3://{s3_bucket}/{s3_key}'
+    IAM_ROLE '{iam_role}'
+    CSV
+    IGNOREHEADER 1;
+    """
+    cursor.execute(copy_query)
+    conn.commit()
+    print("Dados copiados para o Redshift")
+
+    # Fechar conexões
+    cursor.close()
+    conn.close()
+except Exception as e:
+    print(f"Erro ao conectar ao Redshift: {e}")
+```
+
+Referências:
+- [Amazon S3 Documentation](https://docs.aws.amazon.com/s3/)
+- [Amazon Redshift Documentation](https://docs.aws.amazon.com/redshift/)
+
+
+
+
+  
+
+
 
 
 
