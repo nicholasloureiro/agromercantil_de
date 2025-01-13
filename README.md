@@ -506,7 +506,7 @@ Sua empresa está implementando um Data Lake em S3 para armazenar dados brutos e
 
   # Resposta
 
-  Para estruturar os dados no Data Lake e facilitar o consumo no Data Warehouse, seguiria a orientação da [documentação da Amazon S3](https://docs.aws.amazon.com/s3/). Organizaria os dados em pastas baseadas em partições, como ano, mês e dia, para melhorar a eficiência na consulta e transferência de dados.
+Para estruturar os dados no Data Lake e facilitar o consumo no Data Warehouse, seguiria a orientação da [documentação da Amazon S3](https://docs.aws.amazon.com/s3/). Organizaria os dados em pastas baseadas em partições, como ano, mês e dia, para melhorar a eficiência na consulta e transferência de dados.
 
 Para a política de gerenciamento do ciclo de vida dos dados no Data Lake, consultaria a [documentação da Amazon S3 Glacier](https://docs.aws.amazon.com/s3/). MOveria dados que não são acessados frequentemente para o Amazon S3 Glacier após 90 dias e excluiria dados mais antigos após 365 dias, conforme necessário.
 
