@@ -492,7 +492,11 @@ Implementaria **Amazon CloudTrail** para registrar e monitorar todas as ações 
 #### 4. Verificação de Conformidade com LGPD
 Para verificar se a empresa está em conformidade com a LGPD, é necessário implementar uma matriz de impacto de riscos e garantir que todas as práticas de coleta, tratamento e armazenamento de dados pessoais estejam em conformidade com a legislação. Isso inclui obter consentimento explícito dos titulares dos dados, garantir a transparência nas operações de dados e implementar medidas de segurança adequadas.
 
-Ref: https://lec.com.br/compliance-e-lgpd-qual-a-relacao/
+### Exemplo Matriz de Risco
+![image](https://github.com/user-attachments/assets/85384f1e-9eaa-4fd7-8c55-697347515cac)
+
+
+Ref: https://certificacaoiso.com.br/matriz-de-riscos-o-que-e-e-como-aplicar/
 
 Ref: https://aws.amazon.com/pt/blogs/
 
