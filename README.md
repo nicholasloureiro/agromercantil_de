@@ -509,9 +509,85 @@ Sua empresa está implementando um Data Lake em S3 para armazenar dados brutos e
 
 # Resposta
 
-Para estruturar os dados no Data Lake e facilitar o consumo no Data Warehouse, seguiria a orientação da [documentação da Amazon S3](https://docs.aws.amazon.com/s3/). Organizaria os dados em pastas baseadas em partições, como ano, mês e dia, para melhorar a eficiência na consulta e transferência de dados.
+### Estruturação de Dados no Data Lake para Consumo no Data Warehouse
 
-Para a política de gerenciamento do ciclo de vida dos dados no Data Lake, consultaria a [documentação da Amazon S3 Glacier](https://docs.aws.amazon.com/s3/). MOveria dados que não são acessados frequentemente para o Amazon S3 Glacier após 90 dias e excluiria dados mais antigos após 365 dias, conforme necessário.
+1. **Camadas do Data Lake**:
+   - **Raw Layer (Camada Bruta)**:
+     - Dados armazenados no formato original, sem transformações.
+     - Organização por fonte de dados, data de ingestão e tipo (JSON, CSV, Parquet).
+     - Exemplo de estrutura:  
+       ```
+       /raw/{fonte}/{ano}/{mes}/{dia}/{arquivo}
+       /raw/erp/2025/01/13/sales_data.json
+       ```
+   - **Cleansed Layer (Camada Tratada)**:
+     - Dados processados e padronizados (e.g., remoção de duplicatas, normalização).
+     - Estrutura hierárquica por domínio de negócio e granularidade.
+     - Exemplo:  
+       ```
+       /cleansed/{dominio}/{tabela}/{ano}/{mes}/{arquivo}
+       /cleansed/vendas/faturamento/2025/01/faturamento.parquet
+       ```
+   - **Curated Layer (Camada Curada)**:
+     - Dados organizados para atender consultas específicas do Data Warehouse.
+     - Usaria formatos otimizados para leitura (Parquet) e particionamento eficiente.
+     - Exemplo:
+       ```
+       /curated/{modelo_dimensional}/{dim_ou_fato}/{ano}/{mes}/{arquivo}
+       /curated/star_schema/dim_cliente/2025/01/dim_cliente.parquet
+       ```
+
+2. **Organização e Catalogação**:
+   - Utilizaria um **data catalog** (AWS Glue) para documentar as tabelas, metadados e regras de acesso.
+   - Definiria **chaves de particionamento** relevantes (por data, região, cliente).
+
+3. **Integração com o Data Warehouse**:
+   - Criaria pipelines ETL/ELT para extrair dados da camada curada.
+   - Utilizaria ferramentas de orquestração (Apache Airflow) para gerenciar cargas incrementais e completas.
+
+---
+
+### Política de Gerenciamento do Ciclo de Vida dos Dados no Data Lake
+
+1. **Definição de Regras por Camada**: (Essa solução se parece com a arquitetura medalhão, utlizada pela Databricks)
+   - **Raw Layer**:
+     - Retenção de curto prazo (30-90 dias).
+     - Arquivamento automático para armazenamento de baixo custo (Amazon S3 Glacier).
+   - **Cleansed Layer**:
+     - Retenção intermediária (6-12 meses).
+     - Dados usados frequentemente permanecem ativos; dados obsoletos são arquivados.
+   - **Curated Layer**:
+     - Retenção de longo prazo (3-5 anos ou conforme regulamentações).
+     - Dados antigos podem ser compactados ou transferidos para camadas menos acessíveis.
+   ![image](https://github.com/user-attachments/assets/3b97ea94-e91c-4a27-b4f8-6325fd5dcf34)
+
+
+2. **Automatização do Ciclo de Vida**:
+   - Configuraria políticas de **lifecycle management** nas ferramentas de armazenamento (Amazon S3 Lifecycle).
+   - Exemplo de política:
+     - Dados não acessados há 90 dias na camada raw são movidos para arquivamento.
+     - Dados arquivados há mais de 3 anos são excluídos.
+
+3. **Backup e Compliance**:
+   - Implementar backups automáticos regulares para atender requisitos legais.
+   - Monitorar o acesso e auditoria dos dados com logs (AWS CloudTrail).
+
+4. **Monitoramento e Otimização**:
+   - Usar ferramentas de monitoramento (CloudWatch) para rastrear uso e custo.
+   - Ajustar as políticas de retenção com base em padrões de acesso e custo-benefício.
+
+5. **Economia com Políticas de Lifecycle**:
+   - Ao mover dados da camada raw para o Amazon S3 Glacier após 90 dias, seria possível economizar significativamente, já que o S3 Glacier é uma opção de armazenamento de baixo custo.
+   - Considerando que o custo do Amazon S3 Standard é de aproximadamente $0.023 por GB por mês, e o S3 Glacier é de cerca de $0.004 por GB por mês, a economia seria:
+     ```
+     Economia por GB por mês = $0.023 - $0.004 = $0.019
+     ```
+   - Se arquivarmos 1 TB de dados (1024 GB) na camada raw após 90 dias, nossa economia mensal seria:
+     ```
+     Economia mensal = 1024 GB * $0.019 * 6,03 = R$117,34
+     ```
+
+Essa abordagem não apenas organiza os dados para garantir fácil consumo no Data Warehouse, mas também mantém a eficiência do Data Lake ao longo do tempo, proporcionando economias significativas.
 
 ## Script Python
 ```python
@@ -574,9 +650,11 @@ except Exception as e:
 ```
 
 
-Ref:https://docs.aws.amazon.com/s3/
 Ref:https://docs.aws.amazon.com/redshift/
 
+Ref: https://aws.amazon.com/pt/s3/pricing/?gclid=CjwKCAiA7Y28BhAnEiwAAdOJUHkHk7-4SguNMVbmbXqOCnowlx4VJ56qu33bwgQvq43Ra_tL1m5-ABoChmsQAvD_BwE&trk=3daf7be6-997a-4e7c-af79-be4074c210e4&sc_channel=ps&ef_id=CjwKCAiA7Y28BhAnEiwAAdOJUHkHk7-4SguNMVbmbXqOCnowlx4VJ56qu33bwgQvq43Ra_tL1m5-ABoChmsQAvD_BwE:G:s&s_kwcid=AL!4422!3!536456042828!p!!g!!amazon%20s3%20data%20storage%20pricing!12024810840!115492236145
+
+Ref: https://www.databricks.com/br/glossary/medallion-architecture
 
 
 
