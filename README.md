@@ -519,7 +519,7 @@ import boto3
 import psycopg2
 from botocore.exceptions import NoCredentialsError
 
-# Configurações AWS e Redshift
+
 s3_bucket = 'data-lake-bucket'
 s3_key = 'ano=2025/mes=01/dia=01/dados.csv'
 redshift_host = 'redshift-cluster-url'
@@ -560,16 +560,22 @@ try:
     conn.commit()
     print("Dados copiados para o Redshift")
 
-    # Fechar conexões
+    # Verificar dados copiados
+    cursor.execute(f"SELECT * FROM {redshift_table} LIMIT 10")
+    for row in cursor.fetchall():
+        print(row)
+
+  
     cursor.close()
     conn.close()
 except Exception as e:
     print(f"Erro ao conectar ao Redshift: {e}")
+
 ```
 
-Referências:
-- [Amazon S3 Documentation](https://docs.aws.amazon.com/s3/)
-- [Amazon Redshift Documentation](https://docs.aws.amazon.com/redshift/)
+
+Ref:https://docs.aws.amazon.com/s3/
+Ref:https://docs.aws.amazon.com/redshift/
 
 
 
